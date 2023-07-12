@@ -35,7 +35,7 @@ public class ProductController {
     log.info(productDTO);
 
     List<String> fileNames = uploader.uploadFiles(productDTO.getFiles(), true);
-    
+
     productDTO.setImages(fileNames);
 
     Long pno = service.register(productDTO);
@@ -47,7 +47,7 @@ public class ProductController {
   @GetMapping("list")
   public PageResponseDTO<ProductListDTO> list(
       PageRequestDTO pageRequestDTO) {
-        
+
     log.info("------List----------");
     log.info(pageRequestDTO);
 

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
 
@@ -24,10 +24,10 @@ public class ProductServiceImpl implements ProductService{
   public Long register(ProductDTO productDTO) {
 
     Product product = Product.builder()
-    .pname(productDTO.getPname())
-    .pdesc(productDTO.getPdesc())
-    .price(productDTO.getPrice())
-    .build();
+        .pname(productDTO.getPname())
+        .pdesc(productDTO.getPdesc())
+        .price(productDTO.getPrice())
+        .build();
 
     productDTO.getImages().forEach(fname -> {
       product.addImage(fname);
@@ -36,5 +36,5 @@ public class ProductServiceImpl implements ProductService{
     return productRepository.save(product).getPno();
 
   }
-  
+
 }
