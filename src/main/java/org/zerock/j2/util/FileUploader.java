@@ -1,3 +1,4 @@
+
 package org.zerock.j2.util;
 
 import java.io.File;
@@ -21,79 +22,82 @@ import net.coobird.thumbnailator.Thumbnailator;
 public class FileUploader {
 
   public static class UploadException extends RuntimeException {
-    public UploadException(String msg) {
+
+    public UploadException(String msg){
       super(msg);
     }
+
   }
 
-  @Value("${org.zerock.upload.path}") // 실제 저장될 경로
+  @Value("${org.zerock.upload.path}")
   private String path;
 
-  public List<String> uploadFiles(List<MultipartFile> files, boolean makeThumbnail) {
+  public void removeFiles(List<String> fileNames) {
 
-    if (files == null || files.size() == 0) {
+    if(fileNames == null || fileNames.size() == 0){
+      return;
+    }
+
+    for (String fname: fileNames) {
+
+      File original = new File(path, fname);
+      File thumb = new File(path, "s_"+fname);
+
+      if(thumb.exists()) {
+        thumb.delete();
+      }
+      original.delete();
+
+    }
+
+  }
+
+  public List<String> uploadFiles(List<MultipartFile> files, boolean makeThumbnail){
+
+    if(files == null  || files.size() == 0){
       throw new UploadException("No File");
     }
 
-    List<String> uploadFileNames = new ArrayList<>();
+    List<String> uploadFileNames =  new ArrayList<>();
 
     log.info("path: " + path);
 
     log.info(files);
 
-    // loop
+    //loop
     for (MultipartFile mFile : files) {
 
       String originalFileName = mFile.getOriginalFilename();
       String uuid = UUID.randomUUID().toString();
 
-      String saveFileName = uuid + "_" + originalFileName;
-      File saveFile = new File(path, saveFileName);
+      String saveFileName = uuid+"_"+originalFileName;
 
-      try (InputStream in = mFile.getInputStream();
-           OutputStream out = new FileOutputStream(saveFile);) {
+      File saveFile = new File(path,saveFileName );
 
-        FileCopyUtils.copy(in, out); // 파일을 저장
+      try ( InputStream in = mFile.getInputStream();
+            OutputStream out = new FileOutputStream(saveFile);
+      ) {
 
-        if (makeThumbnail) {
+        FileCopyUtils.copy(in, out);
 
-          File thumbOutFile = new File(path, "s_" + saveFileName); // 파일의 섬네일 생성
+        //썸네일 필요하다면
+        if(makeThumbnail){
+          File thumbOutFile = new File(path, "s_"+saveFileName);
 
           Thumbnailator.createThumbnail(saveFile, thumbOutFile, 200, 200);
 
         }
 
+
         uploadFileNames.add(saveFileName);
 
       } catch (Exception e) {
-        throw new UploadException("Upload Fail: " + e.getMessage());
+        throw new UploadException("Upload Fail:" + e.getMessage() );
       }
 
     }
 
     return uploadFileNames;
-
-  }
-
-  public void removeFiles(List<String> fileNames) {
-
-    if (fileNames == null || fileNames.size() == 0) {
-      return;
-    }
-
-    for (String fname : fileNames) {
-
-      File original = new File(path, fname);
-      File thumb = new File(path, "s_" + fname);
-
-      if (thumb.exists()) {
-        thumb.delete();
-      }
-
-      original.delete();
-
-    }
-
   }
 
 }

@@ -40,6 +40,33 @@ public class ProductController {
 
   }
 
+  @PostMapping("modify")
+  public Map<String, Long> modify(ProductDTO productDTO) {
+
+    log.info("-------modify----------");
+    log.info("-------modify----------");
+    log.info("-------modify----------");
+    log.info(productDTO);
+
+    if (productDTO.getFiles() != null && productDTO.getFiles().size() > 0) {
+
+      List<String> uploadFileNames = uploader.uploadFiles(productDTO.getFiles(), true);
+
+      List<String> oldFileNames = productDTO.getImages();
+
+      uploadFileNames.forEach(fname -> oldFileNames.add(fname));
+
+    }
+
+    log.info("After-------------------");
+    log.info(productDTO);
+
+    service.modify(productDTO);
+
+    return Map.of("result", 111L);
+
+  }
+
   @GetMapping("list")
   public PageResponseDTO<ProductListDTO> list(
       PageRequestDTO pageRequestDTO) {

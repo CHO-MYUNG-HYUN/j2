@@ -1,5 +1,6 @@
 package org.zerock.j2.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -24,9 +25,11 @@ public class ProductDTO {
   private int price;
 
   // 데이터베이스로 보내서 처리할 용도
-  private List<String> images;
+  @Builder.Default
+  private List<String> images = new ArrayList<>();
 
   // 등록,수정 업로드된 파일 데이터를 수집하는 용도
-  private List<MultipartFile> files;
+  @Builder.Default
+  private List<MultipartFile> files = new ArrayList<>();
   
 }
