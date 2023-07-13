@@ -51,7 +51,7 @@ public class FileUploader {
       File saveFile = new File(path, saveFileName);
 
       try (InputStream in = mFile.getInputStream();
-          OutputStream out = new FileOutputStream(saveFile);) {
+           OutputStream out = new FileOutputStream(saveFile);) {
 
         FileCopyUtils.copy(in, out); // 파일을 저장
 
@@ -60,7 +60,7 @@ public class FileUploader {
           File thumbOutFile = new File(path, "s_" + saveFileName); // 파일의 섬네일 생성
 
           Thumbnailator.createThumbnail(saveFile, thumbOutFile, 200, 200);
-          
+
         }
 
         uploadFileNames.add(saveFileName);
@@ -72,6 +72,27 @@ public class FileUploader {
     }
 
     return uploadFileNames;
+
+  }
+
+  public void removeFiles(List<String> fileNames) {
+
+    if (fileNames == null || fileNames.size() == 0) {
+      return;
+    }
+
+    for (String fname : fileNames) {
+
+      File original = new File(path, fname);
+      File thumb = new File(path, "s_" + fname);
+
+      if (thumb.exists()) {
+        thumb.delete();
+      }
+
+      original.delete();
+
+    }
 
   }
 
