@@ -14,27 +14,19 @@ public interface MemberCartService {
     List<MemberCartDTO> getCart(String email);
 
     default MemberCart dtoToEntity(MemberCartDTO dto) {
-
-        MemberCart entity = MemberCart.builder()
+        return MemberCart.builder()
                 .cno(dto.getCno())
                 .email(dto.getEmail())
                 .pno(dto.getPno())
                 .build();
-
-        return entity;
-
     }
 
     default MemberCartDTO entityToDTO(MemberCart entity) {
-
-        MemberCartDTO dto = MemberCartDTO.builder()
+        return MemberCartDTO.builder()
                 .cno(entity.getCno())
                 .email(entity.getEmail())
                 .pno(entity.getPno())
                 .build();
-
-        return dto;
-
     }
 
 }
