@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
 
             Member member = result.orElseThrow();
 
-            if( !member.getPw().equals(pw)) {
+            if (!member.getPw().equals(pw)) {
                 throw new MemberLoginException("Password Incorrect !");
             }
 
@@ -44,11 +44,34 @@ public class MemberServiceImpl implements MemberService {
                     .admin(member.isAdmin())
                     .build();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new MemberLoginException(e.getMessage());
         }
 
         return memberDTO;
 
     }
+
+    @Override
+    public MemberDTO getMemberWithEmail(String email) {
+
+        Optional<Member> result = memberRepository.findById(email);
+
+        if (result.isPresent()) { //데이터가 존재하면
+
+            Member member = result.get();
+
+            MemberDTO dto = MemberDTO.builder()
+                    .email(member.getEmail())
+                    .nickname(member.getNickname())
+                    .admin(member.isAdmin())
+                    .build();
+
+            return dto;
+        }
+
+        return null;
+
+    }
+
 }
