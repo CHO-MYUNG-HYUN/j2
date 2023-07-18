@@ -8,6 +8,7 @@ import org.zerock.j2.entity.Member;
 import org.zerock.j2.repository.MemberRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +71,22 @@ public class MemberServiceImpl implements MemberService {
             return dto;
         }
 
-        return null;
+        //데이터베이스에 존재하지 않는 이메일이라면
+        Member socialMember = Member.builder()
+                .email(email)
+                .pw(UUID.randomUUID().toString())
+                .nickname("SOCIAL_MEMBER")
+                .build();
+
+        memberRepository.save(socialMember);
+
+        MemberDTO dto = MemberDTO.builder()
+                .email(socialMember.getEmail())
+                .nickname(socialMember.getNickname())
+                .admin(socialMember.isAdmin())
+                .build();
+
+        return dto;
 
     }
 
