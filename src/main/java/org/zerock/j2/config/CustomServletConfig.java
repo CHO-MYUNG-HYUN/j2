@@ -21,7 +21,7 @@ public class CustomServletConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/member/login");
+                .excludePathPatterns("/api/member/login", "/api/member/refresh", "/api/cart/{email}"); //배열
 
     }
 

@@ -25,4 +25,19 @@ public class JWTTests {
 
     }
 
+    @Test
+    public void testToken() {
+
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InVzZXIwMEBhYWEuY29tIiwiaWF0IjoxNjg5NzQ0MzkxLCJleHAiOjE2ODk3NDQ5OTF9.kg9oEEeuraWz4dzVQFbozOnfTGcJjGcvXgj3lT_BsSk";
+
+        try{
+
+            jwtUtil.validateToken(token);
+
+        } catch (Exception e) {
+            log.info(e);
+        }
+
+    }
+
 }
